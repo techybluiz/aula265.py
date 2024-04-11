@@ -1,6 +1,4 @@
 import abc
-
-
 class Conta(abc.ABC):
     def __init__(self, agencia: int, conta: int, saldo: float = 0) -> None:
         self.agencia = agencia
@@ -24,7 +22,6 @@ class Conta(abc.ABC):
         attrs = f'({self.agencia!r}, {self.conta!r}, {self.saldo!r})'
         return f'{class_name}{attrs}'
 
-
 class ContaPoupanca(Conta):
     def sacar(self, valor):
         valor_pos_saque = self.saldo - valor
@@ -37,7 +34,6 @@ class ContaPoupanca(Conta):
         print('Não foi possível sacar o valor desejado')
         self.detalhes(f'(SAQUE NEGADO {valor})')
         return self.saldo
-
 
 class ContaCorrente(Conta):
     def __init__(
@@ -66,7 +62,6 @@ class ContaCorrente(Conta):
         attrs = f'({self.agencia!r}, {self.conta!r}, {self.saldo!r}, '\
             f'{self.limite!r})'
         return f'{class_name}{attrs}'
-
 
 if __name__ == '__main__':
     cp1 = ContaPoupanca(111, 222)
