@@ -1,67 +1,71 @@
-class Bank:
+import contas
+import pessoas
+
+
+class Banco:
     def __init__(
         self,
-        agencies: list[int] | None = None,
-        client: list[people.Person] | None = None,
-        accounts: list[accounts.Account] | None = None,
+        agencias: list[int] | None = None,
+        clientes: list[pessoas.Pessoa] | None = None,
+        contas: list[contas.Conta] | None = None,
     ):
-        self.agencies = agencies or []
-        self.client = client or []
-        self.accounts = accounts or []
+        self.agencias = agencias or []
+        self.clientes = clientes or []
+        self.contas = contas or []
 
-    def _check_agency(self, account):
-        if account.agency in self.agencies:
-            print('_check_agency', True)
+    def _checa_agencia(self, conta):
+        if conta.agencia in self.agencias:
+            print('_checa_agencia', True)
             return True
-        print('_check_agency', False)
+        print('_checa_agencia', False)
         return False
 
-    def _check_client(self, client):
-        if client in self.client:
-            print('_check_client', True)
+    def _checa_cliente(self, cliente):
+        if cliente in self.clientes:
+            print('_checa_cliente', True)
             return True
-        print('_check_client', False)
+        print('_checa_cliente', False)
         return False
 
-    def _check_account(self, account):
-        if account in self.accounts:
-            print('_check_account', True)
+    def _checa_conta(self, conta):
+        if conta in self.contas:
+            print('_checa_conta', True)
             return True
-        print('_check_account', False)
+        print('_checa_conta', False)
         return False
 
-    def _check_your_account_client(self, client, account):
-        if account is client.account:
-            print('_check_your_account_client', True)
+    def _checa_se_conta_e_do_cliente(self, cliente, conta):
+        if conta is cliente.conta:
+            print('_checa_se_conta_e_do_cliente', True)
             return True
-        print('_check_your_account_client', False)
+        print('_checa_se_conta_e_do_cliente', False)
         return False
 
-    def authenticate(self, client: people.Person, account: accounts.Conta):
-        return self._check_agency(account) and \
-            self._check_client(client) and \
-            self._check_account(account) and \
-            self._check_your_account_client(client, account)
+    def autenticar(self, cliente: pessoas.Pessoa, conta: contas.Conta):
+        return self._checa_agencia(conta) and \
+            self._checa_cliente(cliente) and \
+            self._checa_conta(conta) and \
+            self._checa_se_conta_e_do_cliente(cliente, conta)
 
     def __repr__(self):
         class_name = type(self).__name__
-        attrs = f'({self.agencies!r}, {self.client!r}, {self.accounts!r})'
+        attrs = f'({self.agencias!r}, {self.clientes!r}, {self.contas!r})'
         return f'{class_name}{attrs}'
 
 
 if __name__ == '__main__':
-    c1 = people.Client('Luiz', 30)
-    cc1 = accounts.CheckingAccount(111, 222, 0, 0)
-    c1.account = cc1
-    c2 = people.Client('Maria', 18)
-    cp1 = accounts.SavingsAccount(112, 223, 100)
-    c2.account = cp1
-    bank = Bank()
-    bank.client.extend([c1, c2])
-    bank.accounts.extend([cc1, cp1])
-    bank.agencies.extend([111, 222])
+    c1 = pessoas.Cliente('Luiz', 30)
+    cc1 = contas.ContaCorrente(111, 222, 0, 0)
+    c1.conta = cc1
+    c2 = pessoas.Cliente('Maria', 18)
+    cp1 = contas.ContaPoupanca(112, 223, 100)
+    c2.conta = cp1
+    banco = Banco()
+    banco.clientes.extend([c1, c2])
+    banco.contas.extend([cc1, cp1])
+    banco.agencias.extend([111, 222])
 
-    if bank.authenticate(c1, cc1):
-        cc1.deposit(10)
-        c1.account.deposit(100)
-        print(c1.account)
+    if banco.autenticar(c1, cc1):
+        cc1.depositar(10)
+        c1.conta.depositar(100)
+        print(c1.conta)
